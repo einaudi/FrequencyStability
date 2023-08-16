@@ -1,0 +1,27 @@
+QLineEdit:
+  [
+    { name: "freqCentral", label: "Central frequency [Hz]", default: "1e6" },
+    { name: "freqSampling", label: "Sampling frequency [Hz]", default: "1e3" },
+    { name: "tauMin", label: "Tau min [s]" },
+    { name: "tauMax", label: "Tau max [s]" },
+    { name: "tauN", label: "Tau N", default: "20" },
+    { name: "editFileInput", label: "Input File" }
+  ]
+QPushButton:
+  [
+    { name: "btnAnalyse", label: "Analyse" },
+    { name: "btnFileInput", label: "Choose file" } 
+  ]
+QCheckBox:
+  [
+    { name: "checkCentral", label: "Use data avg"},
+    { name: "checkAllan", label: "Allan deviation" },
+    { name: "checkAllanOvlp", label: "Allan overlapping deviation" },
+    { name: "checkHadamard", label: "Hadamard deviation" }
+  ]
+PlotCanvas:
+  [
+    { name: "canvasDev", xlabel: "Tau [s]", ylabel: "Deviation", settings: {yLog: 1, grid: 1} },
+    { name: "canvasHist", xlabel: "Frequency [Hz]", ylabel: "Counts" },
+    { name: "canvasFreq", xlabel: "Time [s]", ylabel: "Fractional frequency [Hz]" }
+  ]

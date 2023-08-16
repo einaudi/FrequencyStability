@@ -1,0 +1,80 @@
+layouts:
+  [
+    { # Settings Box
+      type: "QGridLayout",
+      name: "settingsBox",
+      label: "Settings",
+      widgets:
+        [
+          # File input
+          { position: [0,0], type: "QLabel", label: "File input" },
+          { position: [0,1], type: "QLineEdit", name: "editFileInput"},
+          { position: [0,2], type: "QPushButton", name: "btnFileInput" },
+          # Central frequency
+          { position: [1,0], type: "QLabel", label: "Central frequency [Hz]" },
+          { position: [1,1], type: "QLineEdit", name: "freqCentral" },
+          { position: [1,2], type: "QLabel", label: "Use data avg" },
+          { position: [1,3], type: "QCheckBox", name: "checkCentral" },
+          # Sampling frequency
+          { position: [2,0], type: "QLabel", label: "Sampling frequency [Hz]" },
+          { position: [2,1], type: "QLineEdit", name: "freqSampling" },
+          # Tau min
+          { position: [3,0], type: "QLabel", label: "Tau min [s]" },
+          { position: [3,1], type: "QLineEdit", name: "tauMin" },
+          # Tau max
+          { position: [4,0], type: "QLabel", label: "Tau max [s]" },
+          { position: [4,1], type: "QLineEdit", name: "tauMax" },
+          # Tau N
+          { position: [5,0], type: "QLabel", label: "Tau N" },
+          { position: [5,1], type: "QLineEdit", name: "tauN" } 
+        ]
+    },
+    { # Choosing deviation type
+      type: "QGridLayout",
+      name: "deviationBox",
+      label: "Deviations",
+      widgets:
+        [
+          { position: [0,0], type: "QLabel", label: "Allan" },
+          { position: [0,1], type: "QWidget", name: "checkAllan" },
+          { position: [0,2], type: "QLabel", label: "Allan overlapping" },
+          { position: [0,3], type: "QWidget", name: "checkAllanOvlp" },
+          { position: [0,4], type: "QLabel", label: "Hadamard" },
+          { position: [0,5], type: "QWidget", name: "checkHadamard" },
+        ]
+    },
+    { # Buttons Box
+      type: "QHBoxLayout",
+      name: "buttonsBox",
+      label: "Buttons",
+      widgets:
+        [
+          { type: "QPushButton", name: "btnAnalyse" }
+        ]
+    }
+  ]
+
+mainLayout:
+  { # Main layout
+    name: "mainLayout",
+    type: "QHBoxLayout",
+    contents:
+      [
+        { # Left main box
+          name: "leftBox", type: "QVBoxLayout", contents:
+          [
+            { name: "settingsBox", type: "layout", contents: [] },
+            { name: "deviationBox", type: "layout", contents: [] },
+            { name: "buttonsBox", type: "layout", contents: [] },
+            { name: "canvasFreq", type: "widget", contents: [] }
+          ]
+        },
+        { # Right main box
+          name: "rightBox", type: "QVBoxLayout", contents: 
+          [
+            { name: "canvasDev", type: "widget", contents: []},
+            { name: "canvasHist", type: "widget", contents: []}
+          ] 
+        }
+      ]
+  }
