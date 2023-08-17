@@ -121,6 +121,15 @@ class PlotCanvas(QWidget):
 
         return True
 
+    def errorbar(self, x, y, axis='main', **kwargs):
+        
+        ln = self.axes[axis].errorbar(x, y, **kwargs)[0]
+        if 'label' in kwargs.keys():
+            ln.set_label(kwargs['label'])
+        self._lns += [ln]
+
+        return True
+
     def pcolormesh(self, xs, ys, zs, axis='main', **kwargs):
 
         xs_v, ys_v = np.meshgrid(xs, ys)
@@ -134,6 +143,16 @@ class PlotCanvas(QWidget):
             **kwargs
         )
         
+    def histogram(self, counts, bins, axis='main'):
+
+        self.axes[axis].hist(
+            bins[:-1],
+            bins,
+            weights=counts
+        )
+
+        return True
+
     def add_legend(self, axis='main', loc=0):
 
         labs = ['' if l.get_label().startswith('_') else l.get_label()
@@ -146,6 +165,7 @@ class PlotCanvas(QWidget):
 
     def refresh(self):
 
+        self._fig.tight_layout()
         self.canvas.draw()
         self.repaint()
 

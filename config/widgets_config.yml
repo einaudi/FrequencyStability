@@ -2,15 +2,16 @@ QLineEdit:
   [
     { name: "freqCentral", label: "Central frequency [Hz]", default: "1e6" },
     { name: "freqSampling", label: "Sampling frequency [Hz]", default: "1e3" },
-    { name: "tauMin", label: "Tau min [s]" },
-    { name: "tauMax", label: "Tau max [s]" },
+    { name: "tauMin", label: "Tau min [s]", default: "1" },
+    { name: "tauMax", label: "Tau max [s]", default: "10" },
     { name: "tauN", label: "Tau N", default: "20" },
     { name: "editFileInput", label: "Input File" }
   ]
 QPushButton:
   [
     { name: "btnAnalyse", label: "Analyse" },
-    { name: "btnFileInput", label: "Choose file" } 
+    { name: "btnFileInput", label: "Choose file" },
+    { name: "btnMeta", label: "Load metadata" }
   ]
 QCheckBox:
   [
@@ -21,7 +22,7 @@ QCheckBox:
   ]
 PlotCanvas:
   [
-    { name: "canvasDev", xlabel: "Tau [s]", ylabel: "Deviation", settings: {yLog: 1, grid: 1} },
+    { name: "canvasDev", xlabel: "Tau [s]", ylabel: "Deviation", settings: {yLog: 1, Grid: 1} },
     { name: "canvasHist", xlabel: "Frequency [Hz]", ylabel: "Counts" },
-    { name: "canvasFreq", xlabel: "Time [s]", ylabel: "Fractional frequency [Hz]" }
+    { name: "canvasFreq", xlabel: "Time [s]", ylabel: "Fractional frequency" }
   ]

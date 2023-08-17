@@ -7,7 +7,8 @@ from PyQt5.QtWidgets import (
     QCheckBox,
     QGridLayout,
     QHBoxLayout,
-    QVBoxLayout
+    QVBoxLayout,
+    QGroupBox
 )
 from widgets.PlotCanvas import PlotCanvas
 
@@ -91,6 +92,8 @@ def generate_layout_tree(layoutTree, layouts, widgets):
         ret = QHBoxLayout()
     elif layoutTree['type'] == 'QVBoxLayout':
         ret = QVBoxLayout()
+    elif layoutTree['type'] == 'QGroupBox':
+        ret = QGroupBox(layoutTree['label'])
     elif layoutTree['type'] == 'layout':
         ret = layouts[layoutTree['name']]
     elif layoutTree['type'] == 'widget':
@@ -106,5 +109,7 @@ def generate_layout_tree(layoutTree, layouts, widgets):
                 ret.addLayout(tmp)
             except TypeError:
                 ret.addWidget(tmp)
+            except AttributeError:
+                ret.setLayout(tmp)
 
     return ret
