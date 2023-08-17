@@ -5,12 +5,15 @@ QLineEdit:
     { name: "tauMin", label: "Tau min [s]", default: "1" },
     { name: "tauMax", label: "Tau max [s]", default: "10" },
     { name: "tauN", label: "Tau N", default: "20" },
-    { name: "editFileInput", label: "Input File" }
+    { name: "editFileInput", label: "Input file" },
+    { name: "editFileOutput", label: "Output file", default: "./data/deviation.csv" }
   ]
 QPushButton:
   [
     { name: "btnAnalyse", label: "Analyse" },
     { name: "btnFileInput", label: "Choose file" },
+    { name: "btnFileOutput", label: "Choose file" },
+    { name: "btnSave", label: "Save" },
     { name: "btnMeta", label: "Load metadata" }
   ]
 QCheckBox:

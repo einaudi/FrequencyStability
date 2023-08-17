@@ -31,7 +31,12 @@ layouts:
           { position: [5,3], type: "QCheckBox", name: "checkTauMax" },
           # Tau N
           { position: [6,0], type: "QLabel", label: "Tau N" },
-          { position: [6,1], type: "QLineEdit", name: "tauN" } 
+          { position: [6,1], type: "QLineEdit", name: "tauN" },
+          # File output
+          { position: [7,0], type: "QLabel", label: "File output" },
+          { position: [8,0], type: "QLineEdit", name: "editFileOutput" },
+          { position: [8,1], type: "QPushButton", name: "btnFileOutput" },
+          { position: [8,2], type: "QPushButton", name: "btnSave" } 
         ]
     },
     { # Choosing deviation type
@@ -56,37 +61,41 @@ layouts:
         [
           { type: "QPushButton", name: "btnAnalyse" }
         ]
-    }
+    },
   ]
 
 mainLayout:
   { # Main layout
     name: "mainLayout",
-    type: "QHBoxLayout",
+    type: "QVBoxLayout",
     contents:
       [
-        { # Left main box
-          name: "leftBox", type: "QVBoxLayout", contents:
+        { # Upper main box
+          name: "upperBox", type: "QHBoxLayout", stretch: 6, contents:
           [
-            { name: "settingsGroup", type: "QGroupBox", label: "Settings", contents: 
+            { name: "upperLeftBox", type: QVBoxLayout, stretch: 1, contents:
               [
-              { name: "settingsBox", type: "layout", contents: [] }
+                { name: "settingsGroup", type: "QGroupBox", label: "Settings", contents: 
+                  [
+                  { name: "settingsBox", type: "layout", contents: [] }
+                  ]
+                },
+                { name: "deviationGroup", type: "QGroupBox", label: "Deviation type", contents:
+                  [
+                    { name: "deviationBox", type: "layout", contents: [] }
+                  ]
+                },
+                { name: "buttonsBox", type: "layout", contents: [] }
               ]
             },
-            { name: "deviationGroup", type: "QGroupBox", label: "Deviation type", contents:
-              [
-                { name: "deviationBox", type: "layout", contents: [] }
-              ]
-            },
-            { name: "buttonsBox", type: "layout", contents: [] },
-            { name: "canvasFreq", type: "widget", contents: [] }
+            { name: "canvasDev", type: "widget", stretch: 2, contents: [] }
           ]
         },
-        { # Right main box
-          name: "rightBox", type: "QVBoxLayout", contents: 
+        { # Lower main box
+          name: "lowerBox", type: "QHBoxLayout", stretch: 5, contents: 
           [
-            { name: "canvasDev", type: "widget", contents: []},
-            { name: "canvasHist", type: "widget", contents: []}
+            { name: "canvasFreq", type: "widget", stretch: 1, contents: []},
+            { name: "canvasHist", type: "widget", stretch: 1, contents: []}
           ] 
         }
       ]

@@ -10,14 +10,13 @@ import numpy as np
 from misc.generators import generate_widgets, generate_layout
 from widgets.DialogProgress import calcDeviationProgress
 import src.frequency_stability as fs
-from utils import read_csv
+from utils import read_csv, save_csv
 
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
     QWidget,
     QFileDialog,
-    QProgressDialog,
     QMessageBox
 )
 
@@ -101,8 +100,11 @@ class FrequencyStability(QMainWindow):
     def initUI(self):
 
         self._widgets['btnFileInput'].clicked.connect(self.loadFile)
+        self._widgets['btnFileOutput'].clicked.connect(self.handleOutputFile)
         self._widgets['btnMeta'].clicked.connect(self.loadMeta)
         self._widgets['btnAnalyse'].clicked.connect(self.analyse)
+        self._widgets['btnSave'].clicked.connect(self.saveDeviations)
+
         self._widgets['checkTauMin'].stateChanged.connect(self.TauMinChanged)
         self._widgets['checkTauMax'].stateChanged.connect(self.TauMaxChanged)
 
@@ -126,6 +128,22 @@ class FrequencyStability(QMainWindow):
             self._data = data
             self._meta = meta
             self._widgets['editFileInput'].setText(inputPaths[0][0])
+            return True
+
+    def handleOutputFile(self):
+
+        outputPaths = QFileDialog.getOpenFileNames(
+            self,
+            'Open file',
+            '~/',
+            available_files
+        )
+
+        if len(outputPaths[0]) > 1:
+            dialogWarning('Choose only one file!')
+            return False
+        else:
+            self._widgets['editFileOutput'].setText(outputPaths[0][0])
             return True
 
     def loadMeta(self):
@@ -297,6 +315,10 @@ class FrequencyStability(QMainWindow):
         # Plot deviations
         self.plotDeviations()
 
+        self.saveDeviations()
+
+        return True
+
     def plotFrequencyHistogram(self):
 
         counts, bins = np.histogram(
@@ -360,6 +382,44 @@ class FrequencyStability(QMainWindow):
         else:
             self._widgets['tauMax'].setReadOnly(False)
 
+    def saveDeviations(self):
+
+        if not self._devs:
+            dialogWarning('No data to save!')
+            return False
+        
+        data = {
+            'Tau [s]': self._taus
+        }
+        for key, value in self._devs.items():
+            data[key] = value
+            data['Confidence interval {}'.format(key)] = self._conf_int[key]
+        data['Noise type'] = self._noise_type
+
+        meta = {
+            'Central frequency [Hz]': self._params['Central frequency [Hz]'],
+            'Sampling frequency [Hz]': self._params['Sampling frequency [Hz]'],
+            'Total samples': self._params['N']
+        }
+
+        outputFilePath = self._widgets['editFileOutput'].text()
+        if not os.path.exists(os.path.dirname(outputFilePath)):
+            os.makedirs(os.path.dirname(outputFilePath))
+
+        if os.path.exists(outputFilePath):
+            msgBox = QMessageBox()
+            msgBox.setText('File already exists!')
+            msgBox.setInformativeText('Do you wish to overwrite it?')
+            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            msgBox.setDefaultButton(QMessageBox.No)
+            msgBox.setIcon(QMessageBox.Question)
+            ret = msgBox.exec()
+
+            if ret == QMessageBox.Yes:
+                save_csv(data, outputFilePath, meta)
+
+        return True
+    
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

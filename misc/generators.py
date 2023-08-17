@@ -106,10 +106,15 @@ def generate_layout_tree(layoutTree, layouts, widgets):
     if layoutTree['contents']:
         for item in layoutTree['contents']:
             tmp = generate_layout_tree(item, layouts, widgets)
+            if 'stretch' in item.keys():
+                stretch = item['stretch']
+            else:
+                stretch = 0
+
             try:
-                ret.addLayout(tmp)
+                ret.addLayout(tmp, stretch=stretch)
             except TypeError:
-                ret.addWidget(tmp)
+                ret.addWidget(tmp, stretch=stretch)
             except AttributeError:
                 ret.setLayout(tmp)
 
