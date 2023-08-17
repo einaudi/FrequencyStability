@@ -8,6 +8,7 @@ import yaml
 import numpy as np
 
 from misc.generators import generate_widgets, generate_layout
+from widgets.DialogProgress import calcDeviationProgress
 import src.frequency_stability as fs
 from utils import read_csv
 
@@ -232,24 +233,34 @@ class FrequencyStability(QMainWindow):
         phase_error = fs.calc_phase_error(fs_frac, self._params['Sampling frequency [Hz]'])
 
         # Calculate deviations
-        if self._widgets['checkAllan'].isChecked():
-            tmp = []
-            progress = dialogProgress('Calculating Allan deviation', self._params['Tau N'], self)
-            for i, tau in enumerate(self._taus):
-                progress.setValue(i)
-                tmp.append(fs.calc_ADEV_single(phase_error, tau))
-                if progress.wasCanceled():
-                    break
-            progress.setValue(self._params['Tau N'])
-            if len(tmp) == self._params['Tau N']:
-                self._devs['ADEV'] = np.array(tmp)
-
-            # self._devs['ADEV'] = fs.calc_ADEV(phase_error, self._taus)
-        if self._widgets['checkAllanOvlp'].isChecked():
-            self._devs['ADEV ovlp'] = fs.calc_ADEV_overlapped(phase_error, self._taus, self._params['Sampling frequency [Hz]'])
-        if self._widgets['checkHadamard'].isChecked():
-            self._devs['HDEV'] = fs.calc_HDEV(phase_error, self._taus, self._params['Sampling frequency [Hz]'])
-
+        try:
+            if self._widgets['checkAllan'].isChecked():
+                self._devs['ADEV'] = calcDeviationProgress(
+                    dev='ADEV',
+                    parent=self,
+                    taus=self._taus,
+                    phase_error=phase_error,
+                    f_sampling=self._params['Sampling frequency [Hz]']
+                )
+            if self._widgets['checkAllanOvlp'].isChecked():
+                self._devs['ADEV ovlp'] = calcDeviationProgress(
+                    dev='ADEV ovlp',
+                    parent=self,
+                    taus=self._taus,
+                    phase_error=phase_error,
+                    f_sampling=self._params['Sampling frequency [Hz]']
+                )
+            if self._widgets['checkHadamard'].isChecked():
+                self._devs['HDEV'] = calcDeviationProgress(
+                    dev='HDEV',
+                    parent=self,
+                    taus=self._taus,
+                    phase_error=phase_error,
+                    f_sampling=self._params['Sampling frequency [Hz]']
+                )
+        except InterruptedError:
+            return False
+        
         # Calculate noise types
         alphas = fs.calc_noise_id(
             self._data['Frequency [Hz]'],
