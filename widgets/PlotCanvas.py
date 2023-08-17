@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QSizePolicy, QWidget, QVBoxLayout
 
 class PlotCanvas(QWidget):
 
-    def __init__(self, xLabel="", yLabel="", parent=None):
+    def __init__(self, xLabel="", yLabel="", parent=None, toolbar=False):
 
         super().__init__()
 
@@ -31,11 +31,14 @@ class PlotCanvas(QWidget):
         self.__yLabel = yLabel
         self._labels = None
 
+        self._toolbar = toolbar
+
         # _axes
         self.init_axes()
 
         # Widgets
-        # self.toolbar = NavigationToolbar(self.canvas, parent)
+        if self._toolbar:
+            self.toolbar = NavigationToolbar(self.canvas, parent)
         self.canvas.setParent(parent)
 
         self.init_layout()
@@ -56,7 +59,8 @@ class PlotCanvas(QWidget):
 
         layout = QVBoxLayout()
         layout.addWidget(self.canvas)
-        # layout.addWidget(self.toolbar)
+        if self._toolbar:
+            layout.addWidget(self.toolbar)
         self.setLayout(layout)
 
     def set_style(self, axis='main', xLabel=None, yLabel=None):

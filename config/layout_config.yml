@@ -22,9 +22,13 @@ layouts:
           # Tau min
           { position: [4,0], type: "QLabel", label: "Tau min [s]" },
           { position: [4,1], type: "QLineEdit", name: "tauMin" },
+          { position: [4,2], type: "QLabel", label: "Set min tau" },
+          { position: [4,3], type: "QCheckBox", name: "checkTauMin" },
           # Tau max
           { position: [5,0], type: "QLabel", label: "Tau max [s]" },
           { position: [5,1], type: "QLineEdit", name: "tauMax" },
+          { position: [5,2], type: "QLabel", label: "Set max tau" },
+          { position: [5,3], type: "QCheckBox", name: "checkTauMax" },
           # Tau N
           { position: [6,0], type: "QLabel", label: "Tau N" },
           { position: [6,1], type: "QLineEdit", name: "tauN" } 

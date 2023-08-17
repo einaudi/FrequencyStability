@@ -18,11 +18,13 @@ QCheckBox:
     { name: "checkCentral", label: "Use data avg"},
     { name: "checkAllan", label: "Allan deviation" },
     { name: "checkAllanOvlp", label: "Allan overlapping deviation" },
-    { name: "checkHadamard", label: "Hadamard deviation" }
+    { name: "checkHadamard", label: "Hadamard deviation" },
+    { name: "checkTauMin", label: "Set min tau" },
+    { name: "checkTauMax", label: "Set max tau" }
   ]
 PlotCanvas:
   [
-    { name: "canvasDev", xlabel: "Tau [s]", ylabel: "Deviation", settings: {yLog: 1, Grid: 1} },
-    { name: "canvasHist", xlabel: "Frequency [Hz]", ylabel: "Counts" },
-    { name: "canvasFreq", xlabel: "Time [s]", ylabel: "Fractional frequency" }
+    { name: "canvasDev", xlabel: "Tau [s]", ylabel: "Deviation", toolbar: True, settings: {yLog: 1, Grid: 1} },
+    { name: "canvasHist", xlabel: "Frequency [Hz]", ylabel: "Counts", toolbar: False },
+    { name: "canvasFreq", xlabel: "Time [s]", ylabel: "Fractional frequency", toolbar: False }
   ]

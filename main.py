@@ -23,19 +23,13 @@ from PyQt5.QtWidgets import (
 
 
 available_files = '(*.csv *.txt)'
+tau_ext_margin = 0.001 # Hz
 
 def dialogWarning(msg):
     msgBox = QMessageBox()
     msgBox.setText(msg)
     msgBox.setIcon(QMessageBox.Warning)
     msgBox.exec()
-
-def dialogProgress(msg, N, parent):
-
-    progress = QProgressDialog(msg, "Cancel", 0, N, parent)
-    progress.setModal(True)
-
-    return progress
 
 
 class FrequencyStability(QMainWindow):
@@ -109,6 +103,8 @@ class FrequencyStability(QMainWindow):
         self._widgets['btnFileInput'].clicked.connect(self.loadFile)
         self._widgets['btnMeta'].clicked.connect(self.loadMeta)
         self._widgets['btnAnalyse'].clicked.connect(self.analyse)
+        self._widgets['checkTauMin'].stateChanged.connect(self.TauMinChanged)
+        self._widgets['checkTauMax'].stateChanged.connect(self.TauMaxChanged)
 
     def loadFile(self):
 
@@ -124,6 +120,9 @@ class FrequencyStability(QMainWindow):
             return False
         else:
             data, meta = read_csv(inputPaths[0][0])
+            if 'Frequency [Hz]' not in data.columns:
+                dialogWarning('Could not find frequency column in data!')
+                return False
             self._data = data
             self._meta = meta
             self._widgets['editFileInput'].setText(inputPaths[0][0])
@@ -327,6 +326,39 @@ class FrequencyStability(QMainWindow):
 
         self._widgets['canvasDev'].add_legend()
         self._widgets['canvasDev'].refresh()
+
+    def TauMinChanged(self):
+
+        if self._widgets['checkTauMin'].isChecked():
+            try:
+                f_s = float(self._widgets['freqSampling'].text()) - tau_ext_margin
+                self._widgets['tauMin'].setText('{:.4e}'.format(1/f_s))
+            except (ValueError, ZeroDivisionError):
+                dialogWarning('Incorrect sampling frequency!')
+                self._widgets['checkTauMin'].setChecked(False)
+            self._widgets['tauMin'].setReadOnly(True)
+        else:
+            self._widgets['tauMin'].setReadOnly(False)
+
+    def TauMaxChanged(self):
+
+        if self._data is None:
+            dialogWarning('Load data first!')
+            self._widgets['checkTauMax'].setChecked(False)
+            return False
+        else:
+            N = self._data['Frequency [Hz]'].size
+
+        if self._widgets['checkTauMax'].isChecked():
+            try:
+                f_s = float(self._widgets['freqSampling'].text()) + tau_ext_margin
+                self._widgets['tauMax'].setText('{:.4e}'.format(N/2/f_s))
+            except (ValueError, ZeroDivisionError):
+                dialogWarning('Incorrect sampling frequency!')
+                self._widgets['checkTauMax'].setChecked(False)
+            self._widgets['tauMax'].setReadOnly(True)
+        else:
+            self._widgets['tauMax'].setReadOnly(False)
 
 
 if __name__ == '__main__':

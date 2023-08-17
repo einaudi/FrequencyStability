@@ -35,7 +35,8 @@ def generate_widgets(widget_conf):
                 elif widget_type == 'PlotCanvas':
                     tmp = PlotCanvas(
                         widget["xlabel"],
-                        widget["ylabel"]
+                        widget["ylabel"],
+                        toolbar=widget["toolbar"]
                     )
                     tmp.set_style()
                     try:
